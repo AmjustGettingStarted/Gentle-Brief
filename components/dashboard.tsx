@@ -80,6 +80,7 @@ export function Dashboard() {
       const body = (await response.json()) as {
         session?: DigestSession;
         mode?: PipelineMode;
+        voice?: "elevenlabs" | "browser";
         error?: string;
       };
       if (!response.ok || !body.session) {
@@ -89,7 +90,9 @@ export function Dashboard() {
       setActive(body.session);
       setMode(body.mode ?? "fixture");
       setSessions((current) => [body.session!, ...current.filter((item) => item.id !== body.session!.id)]);
-      if (body.mode === "live") {
+      if (body.mode === "live" && body.voice === "browser") {
+        toast.warning("The brief is from live sources. ElevenLabs did not return audio, so this browser is reading it.");
+      } else if (body.mode === "live") {
         toast.success("Your brief is ready.");
       } else {
         toast.info("Sample brief is ready. Add API keys for a live scrape and voice.");

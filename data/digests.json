@@ -1,5 +1,65 @@
 [
   {
+    "id": "f2729df1-c3df-4ba5-a20a-f2799a1045a0",
+    "createdAt": "2026-10-20T13:37:35.478Z",
+    "title": "Tech and Startup Community Updates",
+    "calmScore": 80,
+    "audioUrl": "/api/digest/f2729df1-c3df-4ba5-a20a-f2799a1045a0/audio",
+    "duration": 90,
+    "items": [
+      {
+        "id": "4e67b5d6-463c-438e-9613-ae533c427093",
+        "title": "Recent Hacker News Highlights",
+        "summary": "1. DeepSeek open‑sourced its inference engine on GitHub, drawing 989 points.\n2. A Science.org article titled “Demographic ‘Doomsday’ Misses the Mark” sparked discussion with 36 points.\n3. Researchers noted WhatsApp help pages contained hidden AI instructions advising against recommending a regulator, earning 587 points.",
+        "originalUrl": "https://news.ycombinator.com",
+        "sourceName": "Tech",
+        "timestamp": "2026-10-20T13:37:31.914Z"
+      },
+      {
+        "id": "4b1588a8-4ead-4e05-beff-ddea4ca43512",
+        "title": "Community Posts on Product Building and Marketing",
+        "summary": "1. A user shared a retirement‑planner ad that generated 150 clicks, a 2% CTR, but no sign‑ups.\n2. A discussion asked where the line lies between providing setup help and doing the customer’s work.\n3. An author built an AI‑tool ranking site without coding; five cold emails received zero replies.",
+        "originalUrl": "https://www.indiehackers.com",
+        "sourceName": "Indie Hackers",
+        "timestamp": "2026-10-20T13:37:31.914Z"
+      },
+      {
+        "id": "0fa7fab8-0c9c-4422-b53a-6f5c8aca8683",
+        "title": "Science News Site Navigation Overview",
+        "summary": "1. The page notes that every print subscription includes full digital access.\n2. It lists major topic categories such as Health, Humans, Anthropology, Life, Animals, and Climate.\n3. Links are provided for each category, allowing readers to explore specific science sections.",
+        "originalUrl": "https://www.sciencenews.org",
+        "sourceName": "Science",
+        "timestamp": "2026-10-20T13:37:31.914Z"
+      },
+      {
+        "id": "af012a78-e7c3-42f9-badd-3db56006830c",
+        "title": "AP News Bot Verification Notice",
+        "summary": "1. Visitors encounter a security verification page protected by Cloudflare.\n2. The message explains the site is checking that the user is not a bot.\n3. No news content is displayed until verification is completed.",
+        "originalUrl": "https://apnews.com",
+        "sourceName": "World News",
+        "timestamp": "2026-10-20T13:37:31.914Z"
+      }
+    ]
+  },
+  {
+    "id": "40510df5-0639-4428-b274-c781d28d7c4b",
+    "createdAt": "2026-10-20T13:31:54.109Z",
+    "title": "Tech",
+    "calmScore": 70,
+    "audioUrl": "/api/digest/40510df5-0639-4428-b274-c781d28d7c4b/audio",
+    "duration": 16,
+    "items": [
+      {
+        "id": "b1c273c1-2856-482f-ae6b-316082a93bd7",
+        "title": "Tech",
+        "summary": "1. DeepSeek released its open‑source inference engine DeepInfer on GitHub.\n2. A Science article titled “Demographic ‘Doomsday’ Misses the Mark” was discussed.\n3. The Nordwand Mono monospace font for coders was published on GitHub.",
+        "originalUrl": "https://news.ycombinator.com",
+        "sourceName": "Tech",
+        "timestamp": "2026-10-20T13:31:53.064Z"
+      }
+    ]
+  },
+  {
     "id": "b6eb2fbc-4e30-4800-b7f9-7b14011cb0ab",
     "createdAt": "2026-10-20T13:25:01.714Z",
     "title": "The day, without the siren",

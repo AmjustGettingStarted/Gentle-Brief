@@ -1,3 +1,4 @@
+import { errorText, readEnv } from "@/lib/env";
 import { estimateDuration } from "@/lib/script";
 import { isSessionId, saveAudio } from "@/lib/store/digests";
 import type { AudioResult } from "@/types/digest";
@@ -6,12 +7,13 @@ const DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM";
 
 export async function synthesizeSpeech(script: string, sessionId: string): Promise<AudioResult> {
   const duration = estimateDuration(script);
-  const apiKey = process.env.ELEVENLABS_API_KEY?.trim() ?? "";
+  const apiKey = readEnv("ELEVENLABS_API_KEY");
   if (!apiKey || !isSessionId(sessionId)) {
+    console.warn("[gentlebrief] ElevenLabs key missing. Using the browser voice.");
     return { mode: "fixture", audioUrl: null, duration, fallback: true };
   }
 
-  const voiceId = process.env.ELEVENLABS_VOICE_ID?.trim() || DEFAULT_VOICE_ID;
+  const voiceId = readEnv("ELEVENLABS_VOICE_ID") || DEFAULT_VOICE_ID;
 
   try {
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
@@ -36,17 +38,22 @@ export async function synthesizeSpeech(script: string, sessionId: string): Promi
     });
 
     if (!response.ok) {
+      const detail = (await response.text()).slice(0, 400);
+      console.error(`[gentlebrief] ElevenLabs HTTP ${response.status}: ${errorText(detail, [apiKey, voiceId])}`);
       return { mode: "fixture", audioUrl: null, duration, fallback: true };
     }
 
     const bytes = new Uint8Array(await response.arrayBuffer());
     if (bytes.byteLength < 100) {
+      console.error("[gentlebrief] ElevenLabs returned an empty audio file.");
       return { mode: "fixture", audioUrl: null, duration, fallback: true };
     }
 
     const audioUrl = await saveAudio(sessionId, bytes);
+    console.info(`[gentlebrief] ElevenLabs audio saved (${bytes.byteLength} bytes)`);
     return { mode: "live", audioUrl, duration, fallback: false };
-  } catch {
+  } catch (error) {
+    console.error(`[gentlebrief] ElevenLabs failed: ${errorText(error, [apiKey, voiceId])}`);
     return { mode: "fixture", audioUrl: null, duration, fallback: true };
   }
 }

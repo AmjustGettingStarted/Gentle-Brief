@@ -11,6 +11,7 @@ export async function POST(request: Request) {
     return Response.json(result);
   } catch (error) {
     const message = error instanceof Error ? error.message : "The brief did not finish.";
+    console.error(`[gentlebrief] generate failed: ${message}`);
     const status = message === "Choose at least one source." ? 400 : 500;
     return Response.json({ error: message }, { status });
   }

@@ -1,16 +1,21 @@
+import { errorText, readEnv } from "@/lib/env";
 import { fixtureItem, fixtureSummary } from "@/lib/fixtures/digest";
 import { sourcesByIds } from "@/lib/sources";
 import type { DigestItem, ScrapeDocument, SummaryResult } from "@/types/digest";
 
-const MODEL = "llama-3.3-70b-versatile";
+const PREFERRED_MODEL = "llama-3.3-70b-versatile";
+const FALLBACK_MODEL = "openai/gpt-oss-120b";
 const ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
 
-const SYSTEM_PROMPT = `You are GentleBrief: rewrite this noisy information into 3 soothing, objective, high-signal bullet points. Tone: stoic, calm, non-alarmist.
+const SYSTEM_PROMPT = `You are GentleBrief. Summarize only the source text you are given.
+Tone: calm, objective, non-alarmist. Write concise news, not fiction, poetry, or a stoic essay.
+Do not invent events, names, numbers, places, or quotes that are not in the source text.
 Return JSON only with this shape:
 {"title": string, "calmScore": number, "items": [{"sourceName": string, "originalUrl": string, "title": string, "summary": string}]}
 calmScore is an integer from 0 to 100.
-Each summary is exactly 3 short sentences, numbered "1. " "2. " "3. " and separated by newlines.
-Write one item per source document. Do not invent sources.`;
+Each summary is exactly 3 bullets about the actual headlines or facts in that source, numbered "1. " "2. " "3. " and separated by newlines.
+Write one item per source document. Keep the provided sourceName and originalUrl.
+The brief title and each item title must describe the actual stories. Do not use the source label as the title.`;
 
 type ModelPayload = {
   title?: unknown;
@@ -23,16 +28,31 @@ export async function summarizeDocuments(documents: ScrapeDocument[]): Promise<S
     return { mode: "fixture", title: "A calm brief", calmScore: 80, items: [] };
   }
 
-  const apiKey = process.env.OPEN_AI_OR_GROQ_API_KEY?.trim() ?? "";
+  const apiKey = readEnv("OPEN_AI_OR_GROQ_API_KEY");
+  const liveText = documents.some((document) => !isFixtureCopy(document.text));
   if (!apiKey) {
+    console.warn("[gentlebrief] Groq key missing. Using sample summaries.");
     return { mode: "fixture", ...summaryFromFixtures(documents) };
   }
 
   try {
-    const live = await summarizeLive(documents, apiKey);
+    const live = await summarizeLive(documents, apiKey, PREFERRED_MODEL).catch(async (error) => {
+      const message = error instanceof Error ? error.message : String(error);
+      if (!message.includes("model_not_found") && !message.includes("does not exist")) throw error;
+      console.error(
+        `[gentlebrief] ${PREFERRED_MODEL} is not available on this Groq account. Retrying with ${FALLBACK_MODEL}.`,
+      );
+      return summarizeLive(documents, apiKey, FALLBACK_MODEL);
+    });
+    console.info(`[gentlebrief] Groq summarized ${documents.length} source(s) as "${live.title}"`);
     return { mode: "live", ...live };
-  } catch {
-    return { mode: "fixture", ...summaryFromFixtures(documents) };
+  } catch (error) {
+    const message = errorText(error, [apiKey]);
+    console.error(`[gentlebrief] Groq failed: ${message}`);
+    if (!liveText) {
+      return { mode: "fixture", ...summaryFromFixtures(documents) };
+    }
+    throw new Error(`Groq failed: ${message}`);
   }
 }
 
@@ -78,7 +98,7 @@ function extractiveItem(document: ScrapeDocument, timestamp: string): DigestItem
   };
 }
 
-async function summarizeLive(documents: ScrapeDocument[], apiKey: string) {
+async function summarizeLive(documents: ScrapeDocument[], apiKey: string, model: string) {
   const response = await fetch(ENDPOINT, {
     method: "POST",
     headers: {
@@ -86,7 +106,7 @@ async function summarizeLive(documents: ScrapeDocument[], apiKey: string) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: MODEL,
+      model,
       temperature: 0.3,
       max_tokens: 1200,
       response_format: { type: "json_object" },
@@ -109,7 +129,8 @@ async function summarizeLive(documents: ScrapeDocument[], apiKey: string) {
   });
 
   if (!response.ok) {
-    throw new Error("The model did not answer.");
+    const detail = (await response.text()).slice(0, 400);
+    throw new Error(`Groq HTTP ${response.status}: ${detail}`);
   }
 
   const body = (await response.json()) as {
@@ -167,6 +188,10 @@ function extractJson(content: string): string {
 
 function stringField(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
+}
+
+function isFixtureCopy(text: string): boolean {
+  return text.includes("The tools got a little quieter") || text.includes("A compiler release shipped with fewer warnings");
 }
 
 function clampScore(value: unknown): number {

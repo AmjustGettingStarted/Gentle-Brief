@@ -1,3 +1,4 @@
+import { readEnv } from "@/lib/env";
 import { buildScript } from "@/lib/script";
 import { scrapeSources } from "@/lib/services/browserbase";
 import { synthesizeSpeech } from "@/lib/services/elevenlabs";
@@ -8,7 +9,15 @@ import type { DigestSession, PipelineMode } from "@/types/digest";
 export async function generateDigest(sourceIds: string[]): Promise<{
   session: DigestSession;
   mode: PipelineMode;
+  voice: "elevenlabs" | "browser";
 }> {
+  console.info("[gentlebrief] brew started", {
+    sourceIds,
+    browserbase: Boolean(readEnv("BROWSERBASE_API_KEY")),
+    groq: Boolean(readEnv("OPEN_AI_OR_GROQ_API_KEY")),
+    elevenlabs: Boolean(readEnv("ELEVENLABS_API_KEY")),
+  });
+
   const scraped = await scrapeSources(sourceIds);
   if (scraped.documents.length === 0) {
     throw new Error("Choose at least one source.");
@@ -32,9 +41,7 @@ export async function generateDigest(sourceIds: string[]): Promise<{
   await saveDigest(session);
 
   const mode: PipelineMode =
-    scraped.mode === "live" && summary.mode === "live" && audio.mode === "live"
-      ? "live"
-      : "fixture";
+    scraped.mode === "live" && summary.mode === "live" ? "live" : "fixture";
 
-  return { session, mode };
+  return { session, mode, voice: audio.fallback ? "browser" : "elevenlabs" };
 }
