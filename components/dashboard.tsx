@@ -84,13 +84,14 @@ export function Dashboard() {
         voice?: "elevenlabs" | "browser";
         error?: string;
       };
-      if (!response.ok || !body.session) {
+      const session = body.session;
+      if (!response.ok || !session) {
         throw new Error(body.error ?? "The brief did not finish.");
       }
       setProgress(100);
-      setActive(body.session);
+      setActive(session);
       setMode(body.mode ?? "fixture");
-      saveUserHistory([body.session, ...sessions.filter((item) => item.id !== body.session.id)]);
+      saveUserHistory([session, ...sessions.filter((item) => item.id !== session.id)]);
       if (body.mode === "live" && body.voice === "browser") {
         toast.warning("The brief is from live sources. ElevenLabs did not return audio, so this browser is reading it.");
       } else if (body.mode === "live") {
