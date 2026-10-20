@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { DigestHistory } from "@/components/digest-history";
 import { DigestReader } from "@/components/digest-reader";
+import { PacingCard } from "@/components/pacing-card";
 import { SiteHeader } from "@/components/site-header";
 import { SourceSelector } from "@/components/source-selector";
 import { Button } from "@/components/ui/button";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/ui/progress";
+import { saveUserHistory, saveUserSettings, useUserHistory, useUserSettings } from "@/lib/browser-store";
 import { SOURCES } from "@/lib/sources";
 import type { DigestSession, PipelineMode, TopicSource } from "@/types/digest";
 
@@ -22,31 +24,12 @@ export function Dashboard() {
     SOURCES.filter((source) => source.enabled).map((source) => source.id),
   );
   const [customSources, setCustomSources] = useState<TopicSource[]>([]);
-  const [sessions, setSessions] = useState<DigestSession[]>([]);
+  const sessions = useUserHistory();
+  const settings = useUserSettings();
   const [active, setActive] = useState<DigestSession | null>(null);
-  const [mode, setMode] = useState<PipelineMode | null>("fixture");
+  const [mode, setMode] = useState<PipelineMode | null>(null);
   const [brewing, setBrewing] = useState(false);
   const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    let cancelled = false;
-    async function load() {
-      try {
-        const response = await fetch("/api/digest");
-        if (!response.ok) throw new Error("History did not load.");
-        const body = (await response.json()) as { sessions: DigestSession[] };
-        if (cancelled) return;
-        setSessions(body.sessions);
-        setActive((current) => current ?? body.sessions[0] ?? null);
-      } catch {
-        if (!cancelled) toast.error("Past briefs could not be loaded.");
-      }
-    }
-    void load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   useEffect(() => {
     if (!brewing) return;
@@ -91,6 +74,8 @@ export function Dashboard() {
         body: JSON.stringify({
           sourceIds: selected,
           customSources: customSources.filter((source) => selected.includes(source.id)),
+          voice: settings.voice,
+          pace: settings.pace,
         }),
       });
       const body = (await response.json()) as {
@@ -105,7 +90,7 @@ export function Dashboard() {
       setProgress(100);
       setActive(body.session);
       setMode(body.mode ?? "fixture");
-      setSessions((current) => [body.session!, ...current.filter((item) => item.id !== body.session!.id)]);
+      saveUserHistory([body.session, ...sessions.filter((item) => item.id !== body.session.id)]);
       if (body.mode === "live" && body.voice === "browser") {
         toast.warning("The brief is from live sources. ElevenLabs did not return audio, so this browser is reading it.");
       } else if (body.mode === "live") {
@@ -125,8 +110,8 @@ export function Dashboard() {
     <div className="min-h-[100dvh] bg-background">
       <SiteHeader brewing={brewing} />
       <main className="mx-auto flex max-w-[1280px] flex-col gap-8 px-6 py-8">
-        <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
-          <div className="rise-in flex flex-col gap-4" style={{ animationDelay: "80ms" }}>
+        <div className="grid items-stretch gap-6 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
+          <div className="rise-in flex h-full flex-col gap-4" style={{ animationDelay: "80ms" }}>
             <SourceSelector
               selected={selected}
               customSources={customSources}
@@ -149,12 +134,23 @@ export function Dashboard() {
                 <ProgressValue />
               </Progress>
             ) : null}
+            <PacingCard
+              settings={settings}
+              disabled={brewing}
+              onChange={saveUserSettings}
+            />
           </div>
           <div
-            className="rise-in border border-border shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
+            className="rise-in flex h-full min-h-full flex-col border border-border shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
             style={{ animationDelay: "160ms" }}
           >
-            <DigestReader session={active} mode={mode} brewing={brewing} stage={stage} />
+            <DigestReader
+              session={active}
+              mode={mode}
+              brewing={brewing}
+              stage={stage}
+              ambience={settings.ambience}
+            />
           </div>
         </div>
         <div className="rise-in" style={{ animationDelay: "240ms" }}>

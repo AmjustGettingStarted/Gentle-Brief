@@ -36,31 +36,33 @@ export function DigestHistory({
       <CardContent>
         <ScrollArea className="h-72">
           <div className="flex flex-col gap-3 pr-3">
+            {sessions.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No briefs on this browser yet.</p>
+            ) : null}
             {sessions.map((session, index) => (
               <div key={session.id} className="rise-in" style={{ animationDelay: `${index * 80}ms` }}>
                 {index > 0 ? <Separator className="mb-3" /> : null}
-                <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="grid items-center gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto]">
                   <div className="min-w-0">
-                    <p className="truncate font-heading text-base font-semibold uppercase">
+                    <p className="truncate font-heading text-base font-semibold">
                       {session.title}
                     </p>
                     <p className="font-mono text-xs text-muted-foreground">
-                      {formatWhen(session.createdAt)} · {session.items.length} sources
+                      {formatWhen(session.createdAt)} · {session.items.length} {session.items.length === 1 ? "source" : "sources"}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="font-mono">
-                      Calm {session.calmScore}
-                    </Badge>
-                    <Button
-                      type="button"
-                      variant={session.id === activeId ? "secondary" : "outline"}
-                      size="sm"
-                      onClick={() => onReplay(session)}
-                    >
-                      Replay
-                    </Button>
-                  </div>
+                  <Badge variant="outline" className="w-fit font-mono">
+                    Calm {session.calmScore}
+                  </Badge>
+                  <Button
+                    type="button"
+                    variant={session.id === activeId ? "secondary" : "outline"}
+                    size="sm"
+                    className="w-fit cursor-pointer"
+                    onClick={() => onReplay(session)}
+                  >
+                    Replay
+                  </Button>
                 </div>
               </div>
             ))}

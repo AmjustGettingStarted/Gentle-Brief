@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { startAmbience } from "@/lib/ambience";
+import type { AmbienceChoice } from "@/lib/brief-options";
 import { buildScript } from "@/lib/script";
 import type { DigestSession } from "@/types/digest";
 
@@ -26,7 +28,13 @@ function timestamp() {
   return Date.now();
 }
 
-export function AudioPlayer({ session }: { session: DigestSession }) {
+export function AudioPlayer({
+  session,
+  ambience = "silent",
+}: {
+  session: DigestSession;
+  ambience?: AmbienceChoice;
+}) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const tokenRef = useRef(0);
   const offsetRef = useRef(0);
@@ -48,6 +56,11 @@ export function AudioPlayer({ session }: { session: DigestSession }) {
       window.speechSynthesis?.cancel();
     };
   }, []);
+
+  useEffect(() => {
+    if (!playing || muted || ambience === "silent") return;
+    return startAmbience(ambience);
+  }, [playing, muted, ambience]);
 
   useEffect(() => {
     const audio = audioRef.current;

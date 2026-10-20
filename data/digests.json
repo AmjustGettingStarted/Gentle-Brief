@@ -1,5 +1,145 @@
 [
   {
+    "id": "8a72599f-a6d7-4b65-ae0d-c3d4d58a421f",
+    "createdAt": "2026-10-20T15:08:45.979Z",
+    "title": "Tech Digest: Tech Landscape Overview",
+    "calmScore": 78,
+    "audioUrl": "/api/digest/8a72599f-a6d7-4b65-ae0d-c3d4d58a421f/audio",
+    "duration": 34,
+    "items": [
+      {
+        "id": "42aee9b8-285e-4971-9e87-e03425ee5afd",
+        "title": "Open‑Source and Outages",
+        "summary": "The community noted several open‑source projects such as DeepSeek’s inference engine, a TypeScript port to Rust, and a free Android user‑space implementation.\nThere were reports of service disruptions, including a cloud outage affecting financial services and a historic power room incident that impacted air traffic control.\nRegulatory and policy news included a U.S. agency order restricting DeepSeek and a communications regulator’s stance on a social platform’s content guidance.",
+        "originalUrl": "https://news.ycombinator.com",
+        "sourceName": "Tech",
+        "timestamp": "2026-10-20T15:08:44.289Z"
+      }
+    ],
+    "noise": {
+      "headlinesFiltered": 39,
+      "adsRendered": 0,
+      "minutesSaved": 55
+    }
+  },
+  {
+    "id": "544ee485-0db6-48e0-81ca-2bf8a7b7be8b",
+    "createdAt": "2026-10-20T14:21:47.887Z",
+    "title": "Science Digest: Morning Science Reflections",
+    "calmScore": 78,
+    "audioUrl": "/api/digest/544ee485-0db6-48e0-81ca-2bf8a7b7be8b/audio",
+    "duration": 24,
+    "items": [
+      {
+        "id": "f1378121-1a0d-4641-bf2c-edaae8911ef7",
+        "title": "Quantum computing progress",
+        "summary": "Researchers reported a quantum computing achievement that brings the field closer to a new era.\nError‑corrected qubits now exhibit only extremely rare glitches, marking an early step toward larger‑scale quantum machines.\nThe work suggests that more complex quantum calculations may become feasible in the future.",
+        "originalUrl": "https://www.sciencenews.org",
+        "sourceName": "Science",
+        "timestamp": "2026-10-20T14:21:46.770Z"
+      }
+    ],
+    "noise": {
+      "headlinesFiltered": 41,
+      "adsRendered": 0,
+      "minutesSaved": 57
+    }
+  },
+  {
+    "id": "cc7afc73-f63d-4397-b9db-f616aea4857a",
+    "createdAt": "2026-10-20T14:14:12.186Z",
+    "title": "Octopus-inspired skin patch, active Martian canyon, and other recent science findings",
+    "calmScore": 80,
+    "audioUrl": "/api/digest/cc7afc73-f63d-4397-b9db-f616aea4857a/audio",
+    "duration": 40,
+    "items": [
+      {
+        "id": "6b8e6870-e6ec-4376-b434-509c4e6d59ab",
+        "title": "Octopus-inspired skin patch, active Martian canyon, and other recent science findings",
+        "summary": "Researchers unveiled a transparent skin patch that changes color to show pulse when paired with a smartphone.\nSeparate studies reported that the canyon system on Mars continues to experience tectonic activity and that marine life in the Gulf of Mexico has declined since an oil spill.\nAdditional work highlighted advances such as ultrasound‑guided liquid streams, insights into cephalopod evolution, and new findings on zebrafish fin regrowth.",
+        "originalUrl": "https://phys.org",
+        "sourceName": "phys.org",
+        "timestamp": "2026-10-20T14:14:10.393Z"
+      }
+    ],
+    "noise": {
+      "headlinesFiltered": 0,
+      "adsRendered": 0,
+      "minutesSaved": 8
+    }
+  },
+  {
+    "id": "3afd5bc3-cd88-4c07-94b1-2f6976bad2e7",
+    "createdAt": "2026-10-20T14:10:45.216Z",
+    "title": "Today's Calm Brief",
+    "calmScore": 70,
+    "audioUrl": "/api/digest/3afd5bc3-cd88-4c07-94b1-2f6976bad2e7/audio",
+    "duration": 222,
+    "items": [
+      {
+        "id": "2d24344c-285d-4244-b942-bfe988a347de",
+        "title": "DeepSeek banned from United States federal agencies",
+        "summary": "DeepSeek's inference engine was released as open source.\nThe company later faced a ban from United States federal civilian agencies under a new Department of Homeland Security order.\nThis development was reported by Reuters.",
+        "originalUrl": "https://news.ycombinator.com",
+        "sourceName": "Tech",
+        "timestamp": "2026-10-20T14:10:39.549Z"
+      },
+      {
+        "id": "9aaccd09-a506-4ccf-8f1f-042fcb5899af",
+        "title": "Retirement planner built with low engagement",
+        "summary": "An entrepreneur shared a retirement planner that received modest ad clicks and no signups.\nThe creator wonders what might be missing to attract users.\nThe post highlights challenges in converting interest into adoption.",
+        "originalUrl": "https://www.indiehackers.com",
+        "sourceName": "Indie Hackers",
+        "timestamp": "2026-10-20T14:10:39.549Z"
+      },
+      {
+        "id": "d2031ae3-9976-4a47-9d6f-6b43ca6b53c8",
+        "title": "AI can restore speech for those who have lost their voice",
+        "summary": "Researchers reported a method that can restore speech for individuals who have lost their voice.\nThe approach uses artificial intelligence to interpret neural signals.\nThe study suggests a potential new avenue for communication assistance.",
+        "originalUrl": "https://www.sciencenews.org",
+        "sourceName": "Science",
+        "timestamp": "2026-10-20T14:10:39.549Z"
+      },
+      {
+        "id": "2050b6ab-f341-4692-ab75-0b1c3d5668ba",
+        "title": "Llama Windows brings llama.cpp to the Windows system tray",
+        "summary": "A new tool called Llama Windows integrates the llama.cpp model into the Windows system tray.\nIt allows users to run the model locally with a simple interface.\nThe announcement was posted on the Hugging Face blog.",
+        "originalUrl": "https://huggingface.co/blog",
+        "sourceName": "AI & Open Source",
+        "timestamp": "2026-10-20T14:10:39.549Z"
+      },
+      {
+        "id": "78c9b1df-2d1a-4876-9ea8-760ef5d81183",
+        "title": "E‑commerce audit reveals widespread critical accessibility failures",
+        "summary": "An analysis of hundreds of ecommerce product pages identified a high rate of critical accessibility issues.\nThe audit highlighted the need for better compliance with accessibility standards.\nThe findings were shared to encourage improvements in online shopping experiences.",
+        "originalUrl": "https://sidebar.io/",
+        "sourceName": "Design & Craft",
+        "timestamp": "2026-10-20T14:10:39.549Z"
+      },
+      {
+        "id": "81645e4e-e79a-4625-bd9a-745fd6440014",
+        "title": "Mindset & Slow Living",
+        "summary": "1. Just as seeing a tree gives you reason to believe it’s there, sensing that a stranger is creepy gives you reason to walk away Renaissance Italians saw the gun as the Devil’s work.\n2. But soon they embraced this unchivalrous – and necessary – weapon Cicero’s ideal of manly virtue stressed the performance of self-control and bravery, not boastful egotism and domination What we claim as ‘true’ is not a ceiling we are forever failing to reach but something that changes as we climb toward it If the question makes no sense to you, try spending some time with the principle of sufficient reason She was among the first to argue that prosperity, equality and the protection of nature are inseparable planetary goals Sixteenth-century Venice wanted to expel its Jews but couldn’t do without them.\n3. Its compromise was the world’s first ghetto Humanity produces a staggering amount of new knowledge every day.",
+        "originalUrl": "https://aeon.co/essays",
+        "sourceName": "Mindset & Slow Living",
+        "timestamp": "2026-10-20T14:10:39.549Z"
+      },
+      {
+        "id": "448bbd6d-80f6-41be-8ad2-60663849d341",
+        "title": "Phys.org - News and Articles on Science and Technology",
+        "summary": "1. Octopus-inspired patch grips skin and reveals pulse through shifting colors It looks like a small, transparent patch with a rainbow on its surface—or for those old enough to remember, the back of a CD.\n2. The patch is the first of its kind in the world and, when combined with an ordinary smartphone ...\n3. Giant canyon on Mars is still tectonically active today Scientists at Columbia University and Imperial College London have found that the largest canyon system in the solar system is still active and shaping Mars today, billions of years after it first formed.",
+        "originalUrl": "https://phys.org",
+        "sourceName": "phys.org",
+        "timestamp": "2026-10-20T14:10:39.549Z"
+      }
+    ],
+    "noise": {
+      "headlinesFiltered": 105,
+      "adsRendered": 0,
+      "minutesSaved": 147
+    }
+  },
+  {
     "id": "0562ad0c-c427-4d1d-a167-75781edb841e",
     "createdAt": "2026-10-20T14:09:02.793Z",
     "title": "Iran Conflict, Russia-Ukraine War, Alberta Independence Vote, US Airman Death, Voting Charges, Supreme Court Review",

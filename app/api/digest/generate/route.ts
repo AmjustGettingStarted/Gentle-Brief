@@ -1,3 +1,4 @@
+import { isPaceChoice, isVoiceChoice, type PaceChoice, type VoiceChoice } from "@/lib/brief-options";
 import { generateDigest } from "@/lib/services/pipeline";
 import { isPublicHttpUrl } from "@/lib/sources";
 import type { TopicSource } from "@/types/digest";
@@ -9,7 +10,10 @@ export async function POST(request: Request) {
   }
 
   try {
-    const result = await generateDigest(body.sourceIds, body.customSources);
+    const result = await generateDigest(body.sourceIds, body.customSources, {
+      voice: body.voice,
+      pace: body.pace,
+    });
     return Response.json(result);
   } catch (error) {
     const message = error instanceof Error ? error.message : "The brief did not finish.";
@@ -21,14 +25,26 @@ export async function POST(request: Request) {
 
 async function readBody(
   request: Request,
-): Promise<{ sourceIds: string[]; customSources: TopicSource[] } | null> {
+): Promise<{
+  sourceIds: string[];
+  customSources: TopicSource[];
+  voice: VoiceChoice;
+  pace: PaceChoice;
+} | null> {
   try {
-    const body = (await request.json()) as { sourceIds?: unknown; customSources?: unknown };
+    const body = (await request.json()) as {
+      sourceIds?: unknown;
+      customSources?: unknown;
+      voice?: unknown;
+      pace?: unknown;
+    };
     if (!Array.isArray(body.sourceIds) || body.sourceIds.length === 0) return null;
     if (!body.sourceIds.every((item) => typeof item === "string" && item.trim())) return null;
     return {
       sourceIds: body.sourceIds,
       customSources: sanitizeCustom(body.customSources),
+      voice: isVoiceChoice(body.voice) ? body.voice : "charlotte",
+      pace: isPaceChoice(body.pace) ? body.pace : "quick",
     };
   } catch {
     return null;

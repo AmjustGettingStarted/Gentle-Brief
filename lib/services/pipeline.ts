@@ -3,12 +3,13 @@ import { buildScript } from "@/lib/script";
 import { scrapeSources } from "@/lib/services/browserbase";
 import { synthesizeSpeech } from "@/lib/services/elevenlabs";
 import { summarizeDocuments } from "@/lib/services/open-model";
-import { saveDigest } from "@/lib/store/digests";
+import { VOICES, type PaceChoice, type VoiceChoice } from "@/lib/brief-options";
 import type { DigestSession, PipelineMode, TopicSource } from "@/types/digest";
 
 export async function generateDigest(
   sourceIds: string[],
   customSources: TopicSource[] = [],
+  options: { voice?: VoiceChoice; pace?: PaceChoice } = {},
 ): Promise<{
   session: DigestSession;
   mode: PipelineMode;
@@ -26,10 +27,12 @@ export async function generateDigest(
     throw new Error("Choose at least one source.");
   }
 
-  const summary = await summarizeDocuments(scraped.documents);
+  const pace = options.pace === "deep" ? "deep" : "quick";
+  const voice = options.voice === "adam" ? "adam" : "charlotte";
+  const summary = await summarizeDocuments(scraped.documents, pace);
   const id = crypto.randomUUID();
   const script = buildScript(summary.title, summary.items);
-  const audio = await synthesizeSpeech(script, id);
+  const audio = await synthesizeSpeech(script, id, VOICES[voice].id);
 
   const headlinesFiltered = scraped.documents.reduce(
     (total, document) => total + document.filtered,
@@ -49,8 +52,6 @@ export async function generateDigest(
       minutesSaved: Math.max(8, Math.round(headlinesFiltered * 1.4)),
     },
   };
-
-  await saveDigest(session);
 
   const mode: PipelineMode =
     scraped.mode === "live" && summary.mode === "live" ? "live" : "fixture";

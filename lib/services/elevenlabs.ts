@@ -5,15 +5,17 @@ import type { AudioResult } from "@/types/digest";
 
 const DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM";
 
-export async function synthesizeSpeech(script: string, sessionId: string): Promise<AudioResult> {
+export async function synthesizeSpeech(
+  script: string,
+  sessionId: string,
+  voiceId = readEnv("ELEVENLABS_VOICE_ID") || DEFAULT_VOICE_ID,
+): Promise<AudioResult> {
   const duration = estimateDuration(script);
   const apiKey = readEnv("ELEVENLABS_API_KEY");
   if (!apiKey || !isSessionId(sessionId)) {
     console.warn("[gentlebrief] ElevenLabs key missing. Using the browser voice.");
     return { mode: "fixture", audioUrl: null, duration, fallback: true };
   }
-
-  const voiceId = readEnv("ELEVENLABS_VOICE_ID") || DEFAULT_VOICE_ID;
 
   try {
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
