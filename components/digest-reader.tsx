@@ -17,7 +17,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { readingMinutes } from "@/lib/script";
 import { cn } from "@/lib/utils";
-import type { DigestSession, PipelineMode } from "@/types/digest";
+import type { DigestSession, NoiseStats, PipelineMode } from "@/types/digest";
 
 export function DigestReader({
   session,
@@ -37,6 +37,7 @@ export function DigestReader({
       <div aria-hidden className="pointer-events-none absolute bottom-16 -left-6 h-3 w-36 -rotate-6 bg-accent" />
 
       <div className="relative flex flex-col gap-4">
+        {session?.noise && !brewing ? <NoiseBanner noise={session.noise} /> : null}
         <div className="flex flex-wrap items-end justify-between gap-3 pr-16">
           <div>
             <p className="font-mono text-xs tracking-wide text-muted-foreground uppercase">
@@ -65,6 +66,17 @@ export function DigestReader({
         ) : null}
       </div>
     </section>
+  );
+}
+
+function NoiseBanner({ noise }: { noise: NoiseStats }) {
+  return (
+    <Badge
+      variant="outline"
+      className="h-auto max-w-full bg-background px-3 py-1 font-mono text-[0.7rem] leading-5 whitespace-normal"
+    >
+      Noise intercepted · Filtered {noise.headlinesFiltered} clickbait headlines · {noise.adsRendered} ads rendered · ~{noise.minutesSaved}m doomscroll time saved
+    </Badge>
   );
 }
 

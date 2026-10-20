@@ -34,6 +34,7 @@ async function readDocuments(request: Request): Promise<ScrapeDocument[] | null>
         url: record.url,
         title: record.title,
         text: record.text.slice(0, 5000),
+        filtered: typeof record.filtered === "number" ? record.filtered : 0,
       });
     }
     return documents;

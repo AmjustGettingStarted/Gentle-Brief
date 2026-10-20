@@ -49,6 +49,7 @@ export function fixtureDocument(source: TopicSource): ScrapeDocument {
     url: source.url,
     title: copy.pageTitle,
     text: copy.text,
+    filtered: 0,
   };
 }
 

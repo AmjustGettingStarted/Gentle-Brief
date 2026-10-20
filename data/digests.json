@@ -1,5 +1,174 @@
 [
   {
+    "id": "0562ad0c-c427-4d1d-a167-75781edb841e",
+    "createdAt": "2026-10-20T14:09:02.793Z",
+    "title": "Iran Conflict, Russia-Ukraine War, Alberta Independence Vote, US Airman Death, Voting Charges, Supreme Court Review",
+    "calmScore": 70,
+    "audioUrl": "/api/digest/0562ad0c-c427-4d1d-a167-75781edb841e/audio",
+    "duration": 52,
+    "items": [
+      {
+        "id": "e757b9db-f05c-4e4b-8220-98a3c67c592e",
+        "title": "Iran Conflict, Russia-Ukraine War, Alberta Independence Vote, US Airman Death, Voting Charges, Supreme Court Review",
+        "summary": "Reports note ongoing conflict involving Iran and the war between Russia and Ukraine.\nIn Canada a province rejected a proposal for independence, and in the United States a service member was identified after a tragic fall at a college football event.\nLegal actions include a department charging many individuals in a voting case and a supreme court agreeing to review a historic ban on home distilling, while sports and entertainment news mention a quarterback missing the season due to health concerns and a beloved actor’s passing.",
+        "originalUrl": "https://apnews.com",
+        "sourceName": "World News",
+        "timestamp": "2026-10-20T14:09:00.664Z"
+      }
+    ],
+    "noise": {
+      "headlinesFiltered": 7,
+      "adsRendered": 0,
+      "minutesSaved": 10
+    }
+  },
+  {
+    "id": "7990b0f3-d7d1-497b-8339-ac5c67b29f84",
+    "createdAt": "2026-10-20T14:07:50.857Z",
+    "title": "Tech Brief",
+    "calmScore": 68,
+    "audioUrl": "/api/digest/7990b0f3-d7d1-497b-8339-ac5c67b29f84/audio",
+    "duration": 40,
+    "items": [
+      {
+        "id": "6e2e7cdc-cb13-47e6-968d-359b0363873c",
+        "title": "DeepSeek open-sources engine; Apple iPad presentation glitch; NixOS updates",
+        "summary": "DeepSeek has released its inference engine as open source, and the company has also been barred from federal civilian agencies under a new DHS order.\nApple experienced a problem that disrupted a key presentation feature on its iPads, while NixOS continues to evolve, helping users feel more comfortable with its system.\nAdditional notes include a free re‑implementation of Android user space called MicroG, a new monospace font for developers, and reports of a Google cloud outage affecting banking services.",
+        "originalUrl": "https://news.ycombinator.com",
+        "sourceName": "Tech",
+        "timestamp": "2026-10-20T14:07:49.325Z"
+      }
+    ],
+    "noise": {
+      "headlinesFiltered": 39,
+      "adsRendered": 0,
+      "minutesSaved": 55
+    }
+  },
+  {
+    "id": "1d2d3dd6-c674-43dd-8c16-c2d9a6f13dd1",
+    "createdAt": "2026-10-20T14:06:59.542Z",
+    "title": "Science and Technology Highlights",
+    "calmScore": 70,
+    "audioUrl": "/api/digest/1d2d3dd6-c674-43dd-8c16-c2d9a6f13dd1/audio",
+    "duration": 81,
+    "items": [
+      {
+        "id": "bf8d70f1-744a-4903-b585-b2d26fb2ac7c",
+        "title": "Octopus-inspired skin patch, active Martian canyon, cephalopod evolution, river water sharing, interstellar comet, zebrafish fin regrowth, Japanese Mars mission, Gulf marine decline, lung stem cells, hunger‑alcohol link, ultrasound liquid tube, AI symmetry for prenatal diagnosis, brain support cells and aging",
+        "summary": "Researchers unveiled a transparent skin patch that changes color to show pulse, while another team confirmed that the vast canyon on Mars continues to be shaped by tectonic forces.\nStudies explored how ancient genes may have been repurposed to form octopus and cuttlefish suckers, demonstrated coordinated water sharing in river models to mitigate drought, and examined how energetic particles altered the surface of an interstellar comet.\nAdditional work revealed a brief growth signal guiding zebrafish fin regeneration, described Japan's launch toward Mars' moons for sample return, reported a sharp decline in Gulf marine life after an oil spill, identified lung stem cells altering identity for airway repair, linked hunger to alcohol reward memories, showed ultrasound shaping a floating liquid stream, suggested teaching AI symmetry could improve prenatal diagnosis, and connected immature brain support cells to age‑related cognitive decline.",
+        "originalUrl": "https://phys.org",
+        "sourceName": "phys.org",
+        "timestamp": "2026-10-20T14:06:56.541Z"
+      }
+    ],
+    "noise": {
+      "headlinesFiltered": 0,
+      "adsRendered": 0,
+      "minutesSaved": 8
+    }
+  },
+  {
+    "id": "92a1d28f-5aa7-4fe3-b114-cf9be7308654",
+    "createdAt": "2026-10-20T14:00:26.428Z",
+    "title": "Science Weekly Highlights",
+    "calmScore": 70,
+    "audioUrl": "/api/digest/92a1d28f-5aa7-4fe3-b114-cf9be7308654/audio",
+    "duration": 21,
+    "items": [
+      {
+        "id": "a079f4ae-8acb-4657-8c6c-bcbf7262cf07",
+        "title": "AI can give you your voice back",
+        "summary": "Researchers report that artificial intelligence can restore a person's voice.\nThe system analyzes speech patterns and generates audio that matches the individual's tone.\nThis method offers a new option for those who have lost their voice.",
+        "originalUrl": "https://www.sciencenews.org",
+        "sourceName": "Science",
+        "timestamp": "2026-10-20T14:00:25.295Z"
+      }
+    ],
+    "noise": {
+      "headlinesFiltered": 43,
+      "adsRendered": 0,
+      "minutesSaved": 60
+    }
+  },
+  {
+    "id": "d7caea5a-19af-4bd5-9714-ae585f20b547",
+    "createdAt": "2026-10-20T13:56:27.811Z",
+    "title": "Science news highlights",
+    "calmScore": 85,
+    "audioUrl": "/api/digest/d7caea5a-19af-4bd5-9714-ae585f20b547/audio",
+    "duration": 30,
+    "items": [
+      {
+        "id": "61f5061c-db95-4444-b753-baa3cfcc606d",
+        "title": "Recent discoveries and developments in science",
+        "summary": "Researchers demonstrated that artificial intelligence can restore a person's voice.\nStudies suggest many American diets may lack an essential nutrient, and a Neandertal bone shows a hole that hints at a painful ending.\nOther reports describe tiny snakes cartwheeling to escape, the evolution of horned dinosaur weapons for combat, and how redwood forests respond to rising heat.",
+        "originalUrl": "https://www.sciencenews.org",
+        "sourceName": "Science",
+        "timestamp": "2026-10-20T13:56:25.271Z"
+      }
+    ],
+    "noise": {
+      "headlinesFiltered": 216,
+      "adsRendered": 0,
+      "minutesSaved": 302
+    }
+  },
+  {
+    "id": "a674b9ea-f29a-48f9-9f31-1240b7aedbb5",
+    "createdAt": "2026-10-20T13:56:04.203Z",
+    "title": "Tech news roundup",
+    "calmScore": 70,
+    "audioUrl": "/api/digest/a674b9ea-f29a-48f9-9f31-1240b7aedbb5/audio",
+    "duration": 17,
+    "items": [
+      {
+        "id": "9193cd6a-3976-46ef-acf6-02ae2cdfe61a",
+        "title": "DeepSeek open-sources engine; Apple iPad presentation issue; NixOS eases user concerns",
+        "summary": "DeepSeek has open-sourced its inference engine on GitHub.\nApple broke an essential presentation feature of iPads.\nNixOS is making users feel less afraid.",
+        "originalUrl": "https://news.ycombinator.com",
+        "sourceName": "Tech",
+        "timestamp": "2026-10-20T13:56:02.806Z"
+      }
+    ],
+    "noise": {
+      "headlinesFiltered": 72,
+      "adsRendered": 0,
+      "minutesSaved": 101
+    }
+  },
+  {
+    "id": "2228bcb1-0091-4f3e-ab1b-8890306a5e18",
+    "createdAt": "2026-10-20T13:53:13.759Z",
+    "title": "Morning Brief",
+    "calmScore": 85,
+    "audioUrl": "/api/digest/2228bcb1-0091-4f3e-ab1b-8890306a5e18/audio",
+    "duration": 36,
+    "items": [
+      {
+        "id": "76d60a73-52ed-4b0f-a8f5-24e0bba9cd27",
+        "title": "Y Combinator invites applications for its winter batch",
+        "summary": "Y Combinator is inviting applications for its upcoming winter batch.\nThe application period remains open for a limited time.\nInterested founders can submit their proposals through the official website.",
+        "originalUrl": "https://news.ycombinator.com",
+        "sourceName": "Tech",
+        "timestamp": "2026-10-20T13:53:12.014Z"
+      },
+      {
+        "id": "d384c30d-99e6-4073-8e8b-d2da92770e43",
+        "title": "Science News homepage lists topic categories",
+        "summary": "Science News provides a collection of topic categories for readers.\nThe homepage lists sections such as health, humans, archaeology, and many others.\nVisitors can explore articles by selecting the areas that interest them.",
+        "originalUrl": "https://www.sciencenews.org",
+        "sourceName": "Science",
+        "timestamp": "2026-10-20T13:53:12.014Z"
+      }
+    ],
+    "noise": {
+      "headlinesFiltered": 34,
+      "adsRendered": 0,
+      "minutesSaved": 48
+    }
+  },
+  {
     "id": "f2729df1-c3df-4ba5-a20a-f2799a1045a0",
     "createdAt": "2026-10-20T13:37:35.478Z",
     "title": "Tech and Startup Community Updates",

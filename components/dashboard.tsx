@@ -9,7 +9,7 @@ import { SourceSelector } from "@/components/source-selector";
 import { Button } from "@/components/ui/button";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/ui/progress";
 import { SOURCES } from "@/lib/sources";
-import type { DigestSession, PipelineMode } from "@/types/digest";
+import type { DigestSession, PipelineMode, TopicSource } from "@/types/digest";
 
 const STAGES = [
   { at: 18, label: "Reading the sources" },
@@ -21,6 +21,7 @@ export function Dashboard() {
   const [selected, setSelected] = useState(() =>
     SOURCES.filter((source) => source.enabled).map((source) => source.id),
   );
+  const [customSources, setCustomSources] = useState<TopicSource[]>([]);
   const [sessions, setSessions] = useState<DigestSession[]>([]);
   const [active, setActive] = useState<DigestSession | null>(null);
   const [mode, setMode] = useState<PipelineMode | null>("fixture");
@@ -63,6 +64,18 @@ export function Dashboard() {
     );
   }
 
+  function addCustom(url: string) {
+    const source: TopicSource = {
+      id: `custom-${crypto.randomUUID()}`,
+      label: new URL(url).hostname.replace(/^www\./, ""),
+      url,
+      icon: "link",
+      enabled: true,
+    };
+    setCustomSources((current) => [...current, source]);
+    setSelected((current) => [...current, source.id]);
+  }
+
   async function brew() {
     if (selected.length === 0) {
       toast.error("Choose at least one source.");
@@ -75,7 +88,10 @@ export function Dashboard() {
       const response = await fetch("/api/digest/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sourceIds: selected }),
+        body: JSON.stringify({
+          sourceIds: selected,
+          customSources: customSources.filter((source) => selected.includes(source.id)),
+        }),
       });
       const body = (await response.json()) as {
         session?: DigestSession;
@@ -111,7 +127,13 @@ export function Dashboard() {
       <main className="mx-auto flex max-w-[1280px] flex-col gap-8 px-6 py-8">
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
           <div className="rise-in flex flex-col gap-4" style={{ animationDelay: "80ms" }}>
-            <SourceSelector selected={selected} disabled={brewing} onToggle={toggleSource} />
+            <SourceSelector
+              selected={selected}
+              customSources={customSources}
+              disabled={brewing}
+              onToggle={toggleSource}
+              onAdd={addCustom}
+            />
             <Button
               type="button"
               size="lg"

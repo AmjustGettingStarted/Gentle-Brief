@@ -7,15 +7,14 @@ const PREFERRED_MODEL = "llama-3.3-70b-versatile";
 const FALLBACK_MODEL = "openai/gpt-oss-120b";
 const ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
 
-const SYSTEM_PROMPT = `You are GentleBrief. Summarize only the source text you are given.
-Tone: calm, objective, non-alarmist. Write concise news, not fiction, poetry, or a stoic essay.
-Do not invent events, names, numbers, places, or quotes that are not in the source text.
+const SYSTEM_PROMPT = `You are the calm, stoic morning anchor of GentleBrief. Eliminate hype, panic, point tallies (no upvote or point counts), and sensationalism. Synthesize the extracted news into tranquil, objective sentences written to be spoken naturally aloud.
+Use only facts present in the source text. Do not invent events, names, or numbers.
 Return JSON only with this shape:
 {"title": string, "calmScore": number, "items": [{"sourceName": string, "originalUrl": string, "title": string, "summary": string}]}
 calmScore is an integer from 0 to 100.
-Each summary is exactly 3 bullets about the actual headlines or facts in that source, numbered "1. " "2. " "3. " and separated by newlines.
+Each summary is exactly 3 spoken sentences separated by newlines, with no numbers and no point counts.
 Write one item per source document. Keep the provided sourceName and originalUrl.
-The brief title and each item title must describe the actual stories. Do not use the source label as the title.`;
+The brief title and each item title must name the actual stories, not the source label.`;
 
 type ModelPayload = {
   title?: unknown;

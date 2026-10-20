@@ -1,11 +1,14 @@
 import { fixtureDocument } from "@/lib/fixtures/digest";
 import { errorText, readEnv } from "@/lib/env";
-import { sourcesByIds } from "@/lib/sources";
-import { cleanPageText } from "@/lib/text";
+import { resolveSources } from "@/lib/sources";
+import { ARTICLE_EXTRACT_EXPRESSION, cleanPageText } from "@/lib/text";
 import type { ScrapeDocument, ScrapeResult, TopicSource } from "@/types/digest";
 
-export async function scrapeSources(sourceIds: string[]): Promise<ScrapeResult> {
-  const sources = sourcesByIds(sourceIds);
+export async function scrapeSources(
+  sourceIds: string[],
+  customSources: TopicSource[] = [],
+): Promise<ScrapeResult> {
+  const sources = resolveSources(sourceIds, customSources);
   if (sources.length === 0) {
     return { mode: "fixture", documents: [] };
   }
@@ -92,7 +95,10 @@ async function readWithSession(
     try {
       await page.goto(source.url, { waitUntil: "domcontentloaded", timeout: 25000 });
       const title = (await page.title()) || source.label;
-      const raw = await page.evaluate("document.body ? document.body.innerText : ''");
+      const extracted = await page.evaluate(ARTICLE_EXTRACT_EXPRESSION);
+      const raw = typeof extracted === "string" && extracted.trim().length >= 80
+        ? extracted
+        : await page.evaluate("document.body ? document.body.innerText : ''");
       const document = toDocument(source, title, typeof raw === "string" ? raw : "");
       if (!document) {
         throw new Error(`The live page at ${source.url} had no readable article text.`);
@@ -108,14 +114,15 @@ async function readWithSession(
 
 function toDocument(source: TopicSource, title: string, raw: string): ScrapeDocument | null {
   const cleaned = cleanPageText(raw);
-  const text = (cleaned.length >= 80 ? cleaned : raw.replace(/\s+/g, " ").trim()).slice(0, 8000);
-  if (text.length < 80 || isFixtureCopy(text)) return null;
+  const stories = cleaned.text.split("\n").filter(Boolean);
+  if (stories.length < 3 || cleaned.text.length < 80 || isFixtureCopy(cleaned.text)) return null;
   return {
     sourceId: source.id,
     sourceName: source.label,
     url: source.url,
     title: title.trim() || source.label,
-    text,
+    text: cleaned.text,
+    filtered: cleaned.filtered,
   };
 }
 

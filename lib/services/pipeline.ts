@@ -4,9 +4,12 @@ import { scrapeSources } from "@/lib/services/browserbase";
 import { synthesizeSpeech } from "@/lib/services/elevenlabs";
 import { summarizeDocuments } from "@/lib/services/open-model";
 import { saveDigest } from "@/lib/store/digests";
-import type { DigestSession, PipelineMode } from "@/types/digest";
+import type { DigestSession, PipelineMode, TopicSource } from "@/types/digest";
 
-export async function generateDigest(sourceIds: string[]): Promise<{
+export async function generateDigest(
+  sourceIds: string[],
+  customSources: TopicSource[] = [],
+): Promise<{
   session: DigestSession;
   mode: PipelineMode;
   voice: "elevenlabs" | "browser";
@@ -18,7 +21,7 @@ export async function generateDigest(sourceIds: string[]): Promise<{
     elevenlabs: Boolean(readEnv("ELEVENLABS_API_KEY")),
   });
 
-  const scraped = await scrapeSources(sourceIds);
+  const scraped = await scrapeSources(sourceIds, customSources);
   if (scraped.documents.length === 0) {
     throw new Error("Choose at least one source.");
   }
@@ -28,6 +31,10 @@ export async function generateDigest(sourceIds: string[]): Promise<{
   const script = buildScript(summary.title, summary.items);
   const audio = await synthesizeSpeech(script, id);
 
+  const headlinesFiltered = scraped.documents.reduce(
+    (total, document) => total + document.filtered,
+    0,
+  );
   const session: DigestSession = {
     id,
     createdAt: new Date().toISOString(),
@@ -36,6 +43,11 @@ export async function generateDigest(sourceIds: string[]): Promise<{
     audioUrl: audio.audioUrl,
     duration: audio.duration,
     items: summary.items,
+    noise: {
+      headlinesFiltered,
+      adsRendered: 0,
+      minutesSaved: Math.max(8, Math.round(headlinesFiltered * 1.4)),
+    },
   };
 
   await saveDigest(session);
