@@ -3,7 +3,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import type { DigestSession } from "@/types/digest";
 
@@ -26,7 +25,7 @@ export function DigestHistory({
   onReplay: (session: DigestSession) => void;
 }) {
   return (
-    <Card className="rounded-xl border border-border shadow-[0_2px_12px_rgba(0,0,0,0.06)] ring-0">
+    <Card className="rounded-2xl border border-zinc-200/80 bg-white shadow-sm ring-0 dark:bg-zinc-900">
       <CardHeader>
         <CardTitle className="font-heading text-xl font-semibold tracking-tight uppercase">
           Past briefs
@@ -34,8 +33,7 @@ export function DigestHistory({
         <CardDescription>Replay a brief you already brewed.</CardDescription>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-72">
-          <div className="flex flex-col gap-3 pr-3">
+        <div className="flex max-h-72 flex-col gap-3 overflow-y-auto pr-3">
             {sessions.length === 0 ? (
               <p className="text-sm text-muted-foreground">No briefs on this browser yet.</p>
             ) : null}
@@ -66,8 +64,7 @@ export function DigestHistory({
                 </div>
               </div>
             ))}
-          </div>
-        </ScrollArea>
+        </div>
       </CardContent>
     </Card>
   );

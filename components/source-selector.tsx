@@ -33,12 +33,14 @@ const pillClass =
   "h-auto min-h-11 w-full cursor-pointer justify-start px-3 py-2 transition-all duration-200 hover:scale-[1.01] hover:opacity-95 hover:shadow-sm";
 
 export function SourceSelector({
+  className,
   selected,
   customSources,
   disabled,
   onToggle,
   onAdd,
 }: {
+  className?: string;
   selected: string[];
   customSources: TopicSource[];
   disabled: boolean;
@@ -48,14 +50,14 @@ export function SourceSelector({
   const sources = [...SOURCES, ...customSources];
 
   return (
-    <Card className="rounded-xl border border-border shadow-[0_2px_12px_rgba(0,0,0,0.06)] ring-0">
-      <CardHeader>
+    <Card className={cn("rounded-2xl border border-zinc-200/80 bg-white shadow-sm ring-0 dark:bg-zinc-900", className)}>
+      <CardHeader className="shrink-0">
         <CardTitle className="font-heading text-xl font-semibold tracking-tight uppercase">
           Sources
         </CardTitle>
         <CardDescription>Pick the desks this brief should read.</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-2">
+      <CardContent className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
         {sources.map((source) => {
           const on = selected.includes(source.id);
           const Icon = ICONS[source.icon] ?? Link2;

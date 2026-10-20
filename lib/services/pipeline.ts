@@ -29,6 +29,9 @@ export async function generateDigest(
 
   const pace = options.pace === "deep" ? "deep" : "quick";
   const voice = options.voice === "adam" ? "adam" : "charlotte";
+  // #region agent log
+  fetch("http://127.0.0.1:7779/ingest/41dc1293-3851-4b10-979f-d27ffb3a16ff",{method:"POST",headers:{"Content-Type":"application/json","X-Debug-Session-Id":"6ca59f"},body:JSON.stringify({sessionId:"6ca59f",runId:"pre-fix",hypothesisId:"A,D",location:"lib/services/pipeline.ts:voice",message:"pipeline voice choice",data:{requested:options.voice??null,resolved:voice,pace},timestamp:Date.now()})}).catch(()=>{});
+  // #endregion
   const summary = await summarizeDocuments(scraped.documents, pace);
   const id = crypto.randomUUID();
   const script = buildScript(summary.title, summary.items);

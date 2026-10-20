@@ -1,14 +1,38 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { Menu } from "@base-ui/react/menu";
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { VOICES, type AmbienceChoice, type BriefSettings, type PaceChoice } from "@/lib/brief-options";
+import {
+  isAmbienceChoice,
+  isPaceChoice,
+  isVoiceChoice,
+  VOICES,
+  type AmbienceChoice,
+  type BriefSettings,
+  type PaceChoice,
+  type VoiceChoice,
+} from "@/lib/brief-options";
 import { cn } from "@/lib/utils";
 
-const choiceClass = "cursor-pointer transition-all duration-200";
+const VOICE_SHORT: Record<VoiceChoice, string> = {
+  charlotte: "Charlotte",
+  adam: "Adam",
+};
 
-export function PacingCard({
+const PACE_SHORT: Record<PaceChoice, string> = {
+  quick: "Quick",
+  deep: "Deep",
+};
+
+const AMBIENCE_SHORT: Record<AmbienceChoice, string> = {
+  silent: "Silent",
+  rain: "Soft Rain",
+  hiss: "Lo-Fi Hiss",
+};
+
+export function PacingMenu({
   settings,
   disabled,
   onChange,
@@ -17,106 +41,102 @@ export function PacingCard({
   disabled: boolean;
   onChange: (patch: Partial<BriefSettings>) => void;
 }) {
+  const summary = `${VOICE_SHORT[settings.voice]} · ${PACE_SHORT[settings.pace]} · ${AMBIENCE_SHORT[settings.ambience]}`;
+
   return (
-    <Card className="min-h-48 flex-1 rounded-xl border border-border shadow-[0_2px_12px_rgba(0,0,0,0.06)] ring-0">
-      <CardHeader>
-        <CardTitle className="font-heading text-xl font-semibold tracking-tight uppercase">
-          Pacing & Voice
-        </CardTitle>
-        <CardDescription>Choices for the next brief. They stay on this browser.</CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <ChoiceRow label="Voice">
-          <Choice
-            pressed={settings.voice === "charlotte"}
-            disabled={disabled}
-            onClick={() => onChange({ voice: "charlotte" })}
-          >
-            {VOICES.charlotte.label}
-          </Choice>
-          <Choice
-            pressed={settings.voice === "adam"}
-            disabled={disabled}
-            onClick={() => onChange({ voice: "adam" })}
-          >
-            {VOICES.adam.label}
-          </Choice>
-        </ChoiceRow>
-        <ChoiceRow label="Target pace">
-          <Choice
-            pressed={settings.pace === "quick"}
-            disabled={disabled}
-            onClick={() => onChange({ pace: "quick" satisfies PaceChoice })}
-          >
-            Quick (60s)
-          </Choice>
-          <Choice
-            pressed={settings.pace === "deep"}
-            disabled={disabled}
-            onClick={() => onChange({ pace: "deep" satisfies PaceChoice })}
-          >
-            Deep (3 min)
-          </Choice>
-        </ChoiceRow>
-        <ChoiceRow label="Ambient soundscape">
-          <Choice
-            pressed={settings.ambience === "silent"}
-            disabled={disabled}
-            onClick={() => onChange({ ambience: "silent" satisfies AmbienceChoice })}
-          >
-            Silent
-          </Choice>
-          <Choice
-            pressed={settings.ambience === "rain"}
-            disabled={disabled}
-            onClick={() => onChange({ ambience: "rain" satisfies AmbienceChoice })}
-          >
-            Soft Rain
-          </Choice>
-          <Choice
-            pressed={settings.ambience === "hiss"}
-            disabled={disabled}
-            onClick={() => onChange({ ambience: "hiss" satisfies AmbienceChoice })}
-          >
-            Lo-Fi Hiss
-          </Choice>
-        </ChoiceRow>
-      </CardContent>
-    </Card>
+    <Menu.Root modal={false}>
+      <Menu.Trigger
+        disabled={disabled}
+        render={
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            className="h-12 w-full cursor-pointer justify-between px-3"
+          />
+        }
+      >
+        <span className="truncate">Voice and pace · {summary}</span>
+        <ChevronDown data-icon="inline-end" />
+      </Menu.Trigger>
+      <Menu.Portal>
+        <Menu.Positioner className="z-[200]" side="bottom" align="end" sideOffset={8}>
+          <Menu.Popup className="w-64 origin-(--transform-origin) rounded-2xl border border-zinc-200/80 bg-white p-3 shadow-sm ring-0 outline-none dark:bg-zinc-900">
+            <SettingGroup label="Voice">
+              <Menu.RadioGroup
+                value={settings.voice}
+                disabled={disabled}
+                onValueChange={(value) => {
+                  if (isVoiceChoice(value)) onChange({ voice: value });
+                }}
+              >
+                <SettingItem value="charlotte">{VOICES.charlotte.label}</SettingItem>
+                <SettingItem value="adam">{VOICES.adam.label}</SettingItem>
+              </Menu.RadioGroup>
+            </SettingGroup>
+            <SettingGroup label="Target pace">
+              <Menu.RadioGroup
+                value={settings.pace}
+                disabled={disabled}
+                onValueChange={(value) => {
+                  if (isPaceChoice(value)) onChange({ pace: value });
+                }}
+              >
+                <SettingItem value="quick">Quick (60s)</SettingItem>
+                <SettingItem value="deep">Deep (3 min)</SettingItem>
+              </Menu.RadioGroup>
+            </SettingGroup>
+            <SettingGroup label="Ambient soundscape">
+              <Menu.RadioGroup
+                value={settings.ambience}
+                disabled={disabled}
+                onValueChange={(value) => {
+                  if (isAmbienceChoice(value)) onChange({ ambience: value });
+                }}
+              >
+                <SettingItem value="silent">Silent</SettingItem>
+                <SettingItem value="rain">Soft Rain</SettingItem>
+                <SettingItem value="hiss">Lo-Fi Hiss</SettingItem>
+              </Menu.RadioGroup>
+            </SettingGroup>
+          </Menu.Popup>
+        </Menu.Positioner>
+      </Menu.Portal>
+    </Menu.Root>
   );
 }
 
-function ChoiceRow({ label, children }: { label: string; children: ReactNode }) {
+function SettingGroup({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="flex flex-col gap-2">
-      <p className="font-mono text-xs tracking-wide text-muted-foreground uppercase">{label}</p>
-      <div className="flex flex-wrap gap-2">{children}</div>
-    </div>
+    <Menu.Group className="flex flex-col gap-1 py-1">
+      <Menu.GroupLabel className="px-2 font-mono text-xs tracking-wide text-muted-foreground uppercase">
+        {label}
+      </Menu.GroupLabel>
+      {children}
+    </Menu.Group>
   );
 }
 
-function Choice({
-  pressed,
-  disabled,
-  onClick,
-  children,
-}: {
-  pressed: boolean;
-  disabled: boolean;
-  onClick: () => void;
-  children: ReactNode;
-}) {
+function SettingItem({ value, children }: { value: string; children: ReactNode }) {
   return (
-    <Button
-      type="button"
-      size="sm"
-      variant={pressed ? "secondary" : "outline"}
-      aria-pressed={pressed}
-      disabled={disabled}
-      className={cn(choiceClass, pressed ? "border-transparent" : "border-border/60")}
-      onClick={onClick}
+    <Menu.RadioItem
+      value={value}
+      closeOnClick={false}
+      onPointerEnter={(event) => {
+        const el = event.currentTarget;
+        const bg = getComputedStyle(el).backgroundColor;
+        // #region agent log
+        fetch("http://127.0.0.1:7779/ingest/41dc1293-3851-4b10-979f-d27ffb3a16ff",{method:"POST",headers:{"Content-Type":"application/json","X-Debug-Session-Id":"6ca59f"},body:JSON.stringify({sessionId:"6ca59f",runId:"pre-fix",hypothesisId:"F,G",location:"components/pacing-card.tsx:hover",message:"menu item hover",data:{label:el.textContent,checked:el.hasAttribute("data-checked"),highlighted:el.hasAttribute("data-highlighted"),bg},timestamp:Date.now()})}).catch(()=>{});
+        // #endregion
+      }}
+      className={cn(
+        "cursor-pointer rounded-lg px-2 py-1.5 text-sm text-foreground outline-none select-none",
+        "data-highlighted:bg-muted data-highlighted:text-foreground",
+        "data-checked:bg-secondary data-checked:text-secondary-foreground",
+        "data-checked:data-highlighted:bg-muted data-checked:data-highlighted:text-foreground",
+      )}
     >
       {children}
-    </Button>
+    </Menu.RadioItem>
   );
 }

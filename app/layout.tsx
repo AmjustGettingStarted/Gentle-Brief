@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${oswald.variable} ${jetbrains.variable} h-full antialiased`}>
-      <body className="min-h-[100dvh] bg-background text-foreground">
+      <body className="min-h-[100dvh] bg-[#fcfbf9] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:24px_24px] text-foreground">
         <Providers>{children}</Providers>
       </body>
     </html>

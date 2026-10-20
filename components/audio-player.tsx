@@ -174,7 +174,7 @@ export function AudioPlayer({
   }
 
   return (
-    <Card className="rounded-xl border border-border bg-background shadow-[0_2px_12px_rgba(0,0,0,0.06)] ring-0">
+    <Card className="rounded-2xl border border-zinc-200/80 bg-white shadow-sm ring-0 dark:bg-zinc-900">
       <CardContent className="flex flex-col gap-4">
         {session.audioUrl ? (
           <audio ref={audioRef} src={session.audioUrl} preload="metadata" />

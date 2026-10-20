@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { DigestHistory } from "@/components/digest-history";
 import { DigestReader } from "@/components/digest-reader";
-import { PacingCard } from "@/components/pacing-card";
+import { PacingMenu } from "@/components/pacing-card";
 import { SiteHeader } from "@/components/site-header";
 import { SourceSelector } from "@/components/source-selector";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,24 @@ export function Dashboard() {
   const [mode, setMode] = useState<PipelineMode | null>(null);
   const [brewing, setBrewing] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const grid = document.querySelector("[data-brief-grid]");
+    const left = grid?.children[0] as HTMLElement | undefined;
+    const right = grid?.children[1] as HTMLElement | undefined;
+    const card = left?.querySelector("[data-slot=card]") as HTMLElement | undefined;
+    const content = card?.querySelector("[data-slot=card-content]") as HTMLElement | undefined;
+    const brewButton = left?.querySelector("button") as HTMLElement | undefined;
+    let stored: unknown = null;
+    try {
+      stored = JSON.parse(window.localStorage.getItem("gentlebrief_user_settings") ?? "null");
+    } catch {
+      stored = "unreadable";
+    }
+    // #region agent log
+    fetch("http://127.0.0.1:7779/ingest/41dc1293-3851-4b10-979f-d27ffb3a16ff",{method:"POST",headers:{"Content-Type":"application/json","X-Debug-Session-Id":"6ca59f"},body:JSON.stringify({sessionId:"6ca59f",runId:"pre-fix",hypothesisId:"A,E",location:"components/dashboard.tsx:layout",message:"column stretch and stored voice",data:{stored,settings,activeTitle:active?.title??null,activeHasAudio:Boolean(active?.audioUrl),leftH:left?Math.round(left.getBoundingClientRect().height):0,rightH:right?Math.round(right.getBoundingClientRect().height):0,cardH:card?Math.round(card.getBoundingClientRect().height):0,contentH:content?Math.round(content.getBoundingClientRect().height):0,contentScroll:content?.scrollHeight??0,buttonTop:brewButton&&card?Math.round(brewButton.getBoundingClientRect().top-card.getBoundingClientRect().bottom):null},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+  }, [active, brewing, settings]);
 
   useEffect(() => {
     if (!brewing) return;
@@ -67,6 +85,9 @@ export function Dashboard() {
 
     setBrewing(true);
     setProgress(8);
+    // #region agent log
+    fetch("http://127.0.0.1:7779/ingest/41dc1293-3851-4b10-979f-d27ffb3a16ff",{method:"POST",headers:{"Content-Type":"application/json","X-Debug-Session-Id":"6ca59f"},body:JSON.stringify({sessionId:"6ca59f",runId:"pre-fix",hypothesisId:"A,B",location:"components/dashboard.tsx:brew",message:"brew sending voice",data:{voice:settings.voice,pace:settings.pace,ambience:settings.ambience},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
     try {
       const response = await fetch("/api/digest/generate", {
         method: "POST",
@@ -84,6 +105,9 @@ export function Dashboard() {
         voice?: "elevenlabs" | "browser";
         error?: string;
       };
+      // #region agent log
+      fetch("http://127.0.0.1:7779/ingest/41dc1293-3851-4b10-979f-d27ffb3a16ff",{method:"POST",headers:{"Content-Type":"application/json","X-Debug-Session-Id":"6ca59f"},body:JSON.stringify({sessionId:"6ca59f",runId:"pre-fix",hypothesisId:"B,C",location:"components/dashboard.tsx:brew-result",message:"brew voice result",data:{ok:response.ok,mode:body.mode??null,voice:body.voice??null,hasAudio:Boolean(body.session?.audioUrl),error:body.error??null},timestamp:Date.now()})}).catch(()=>{});
+      // #endregion
       if (!response.ok || !body.session) {
         throw new Error(body.error ?? "The brief did not finish.");
       }
@@ -107,11 +131,11 @@ export function Dashboard() {
   }
 
   return (
-    <div className="min-h-[100dvh] bg-background">
+    <div className="min-h-[100dvh]">
       <SiteHeader brewing={brewing} />
       <main className="mx-auto flex max-w-[1280px] flex-col gap-8 px-6 py-8">
-        <div className="grid items-stretch gap-6 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
-          <div className="rise-in flex h-full flex-col gap-4" style={{ animationDelay: "80ms" }}>
+        <div data-brief-grid className="grid grid-cols-1 items-start gap-6 md:grid-cols-12">
+          <div className="rise-in flex flex-col gap-4 md:col-span-4" style={{ animationDelay: "80ms" }}>
             <SourceSelector
               selected={selected}
               customSources={customSources}
@@ -119,38 +143,33 @@ export function Dashboard() {
               onToggle={toggleSource}
               onAdd={addCustom}
             />
+            <PacingMenu settings={settings} disabled={brewing} onChange={saveUserSettings} />
             <Button
               type="button"
               size="lg"
-              className="h-12 text-base font-semibold tracking-wide uppercase"
+              className="h-12 shrink-0 text-base font-semibold tracking-wide uppercase"
               disabled={brewing}
               onClick={() => void brew()}
             >
               {brewing ? "Brewing" : "Brew Digest"}
             </Button>
             {brewing ? (
-              <Progress value={progress}>
+              <Progress value={progress} className="shrink-0">
                 <ProgressLabel className="font-mono text-xs">{stage}</ProgressLabel>
                 <ProgressValue />
               </Progress>
             ) : null}
-            <PacingCard
-              settings={settings}
-              disabled={brewing}
-              onChange={saveUserSettings}
-            />
           </div>
-          <div
-            className="rise-in flex h-full min-h-full flex-col border border-border shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
-            style={{ animationDelay: "160ms" }}
-          >
-            <DigestReader
-              session={active}
-              mode={mode}
-              brewing={brewing}
-              stage={stage}
-              ambience={settings.ambience}
-            />
+          <div className="flex flex-col md:col-span-8">
+            <div className="rise-in flex flex-col" style={{ animationDelay: "160ms" }}>
+              <DigestReader
+                session={active}
+                mode={mode}
+                brewing={brewing}
+                stage={stage}
+                ambience={settings.ambience}
+              />
+            </div>
           </div>
         </div>
         <div className="rise-in" style={{ animationDelay: "240ms" }}>

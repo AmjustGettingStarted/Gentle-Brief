@@ -8,7 +8,8 @@ const HISTORY_KEY = "gentlebrief_user_history";
 const SETTINGS_KEY = "gentlebrief_user_settings";
 const HISTORY_LIMIT = 24;
 
-let historyCache: DigestSession[] = [];
+const EMPTY_HISTORY: DigestSession[] = [];
+let historyCache: DigestSession[] = EMPTY_HISTORY;
 let settingsCache: BriefSettings = DEFAULT_SETTINGS;
 let historyReady = false;
 let settingsReady = false;
@@ -16,13 +17,14 @@ const historyListeners = new Set<() => void>();
 const settingsListeners = new Set<() => void>();
 
 function readHistory(): DigestSession[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return EMPTY_HISTORY;
   try {
     const parsed = JSON.parse(window.localStorage.getItem(HISTORY_KEY) ?? "[]") as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter(isSession).slice(0, HISTORY_LIMIT);
+    if (!Array.isArray(parsed)) return EMPTY_HISTORY;
+    const sessions = parsed.filter(isSession).slice(0, HISTORY_LIMIT);
+    return sessions.length === 0 ? EMPTY_HISTORY : sessions;
   } catch {
-    return [];
+    return EMPTY_HISTORY;
   }
 }
 
@@ -63,7 +65,7 @@ export function useUserHistory(): DigestSession[] {
       return () => historyListeners.delete(listener);
     },
     historySnapshot,
-    () => [],
+    () => EMPTY_HISTORY,
   );
 }
 
