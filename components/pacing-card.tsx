@@ -122,13 +122,6 @@ function SettingItem({ value, children }: { value: string; children: ReactNode }
     <Menu.RadioItem
       value={value}
       closeOnClick={false}
-      onPointerEnter={(event) => {
-        const el = event.currentTarget;
-        const bg = getComputedStyle(el).backgroundColor;
-        // #region agent log
-        fetch("http://127.0.0.1:7779/ingest/41dc1293-3851-4b10-979f-d27ffb3a16ff",{method:"POST",headers:{"Content-Type":"application/json","X-Debug-Session-Id":"6ca59f"},body:JSON.stringify({sessionId:"6ca59f",runId:"pre-fix",hypothesisId:"F,G",location:"components/pacing-card.tsx:hover",message:"menu item hover",data:{label:el.textContent,checked:el.hasAttribute("data-checked"),highlighted:el.hasAttribute("data-highlighted"),bg},timestamp:Date.now()})}).catch(()=>{});
-        // #endregion
-      }}
       className={cn(
         "cursor-pointer rounded-lg px-2 py-1.5 text-sm text-foreground outline-none select-none",
         "data-highlighted:bg-muted data-highlighted:text-foreground",

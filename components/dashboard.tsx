@@ -32,24 +32,6 @@ export function Dashboard() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const grid = document.querySelector("[data-brief-grid]");
-    const left = grid?.children[0] as HTMLElement | undefined;
-    const right = grid?.children[1] as HTMLElement | undefined;
-    const card = left?.querySelector("[data-slot=card]") as HTMLElement | undefined;
-    const content = card?.querySelector("[data-slot=card-content]") as HTMLElement | undefined;
-    const brewButton = left?.querySelector("button") as HTMLElement | undefined;
-    let stored: unknown = null;
-    try {
-      stored = JSON.parse(window.localStorage.getItem("gentlebrief_user_settings") ?? "null");
-    } catch {
-      stored = "unreadable";
-    }
-    // #region agent log
-    fetch("http://127.0.0.1:7779/ingest/41dc1293-3851-4b10-979f-d27ffb3a16ff",{method:"POST",headers:{"Content-Type":"application/json","X-Debug-Session-Id":"6ca59f"},body:JSON.stringify({sessionId:"6ca59f",runId:"pre-fix",hypothesisId:"A,E",location:"components/dashboard.tsx:layout",message:"column stretch and stored voice",data:{stored,settings,activeTitle:active?.title??null,activeHasAudio:Boolean(active?.audioUrl),leftH:left?Math.round(left.getBoundingClientRect().height):0,rightH:right?Math.round(right.getBoundingClientRect().height):0,cardH:card?Math.round(card.getBoundingClientRect().height):0,contentH:content?Math.round(content.getBoundingClientRect().height):0,contentScroll:content?.scrollHeight??0,buttonTop:brewButton&&card?Math.round(brewButton.getBoundingClientRect().top-card.getBoundingClientRect().bottom):null},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
-  }, [active, brewing, settings]);
-
-  useEffect(() => {
     if (!brewing) return;
     const timer = window.setInterval(() => {
       setProgress((current) => (current >= 90 ? current : current + 4));
@@ -85,9 +67,6 @@ export function Dashboard() {
 
     setBrewing(true);
     setProgress(8);
-    // #region agent log
-    fetch("http://127.0.0.1:7779/ingest/41dc1293-3851-4b10-979f-d27ffb3a16ff",{method:"POST",headers:{"Content-Type":"application/json","X-Debug-Session-Id":"6ca59f"},body:JSON.stringify({sessionId:"6ca59f",runId:"pre-fix",hypothesisId:"A,B",location:"components/dashboard.tsx:brew",message:"brew sending voice",data:{voice:settings.voice,pace:settings.pace,ambience:settings.ambience},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     try {
       const response = await fetch("/api/digest/generate", {
         method: "POST",
@@ -105,9 +84,6 @@ export function Dashboard() {
         voice?: "elevenlabs" | "browser";
         error?: string;
       };
-      // #region agent log
-      fetch("http://127.0.0.1:7779/ingest/41dc1293-3851-4b10-979f-d27ffb3a16ff",{method:"POST",headers:{"Content-Type":"application/json","X-Debug-Session-Id":"6ca59f"},body:JSON.stringify({sessionId:"6ca59f",runId:"pre-fix",hypothesisId:"B,C",location:"components/dashboard.tsx:brew-result",message:"brew voice result",data:{ok:response.ok,mode:body.mode??null,voice:body.voice??null,hasAudio:Boolean(body.session?.audioUrl),error:body.error??null},timestamp:Date.now()})}).catch(()=>{});
-      // #endregion
       if (!response.ok || !body.session) {
         throw new Error(body.error ?? "The brief did not finish.");
       }
@@ -134,7 +110,7 @@ export function Dashboard() {
     <div className="min-h-[100dvh]">
       <SiteHeader brewing={brewing} />
       <main className="mx-auto flex max-w-[1280px] flex-col gap-8 px-6 py-8">
-        <div data-brief-grid className="grid grid-cols-1 items-start gap-6 md:grid-cols-12">
+        <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-12">
           <div className="rise-in flex flex-col gap-4 md:col-span-4" style={{ animationDelay: "80ms" }}>
             <SourceSelector
               selected={selected}
